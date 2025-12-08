@@ -312,10 +312,9 @@ Modal Crear reservacion
                     <div class="form-group has-feedback">
                         <label>Estado</label>
                         <select class="form-control" name="estado">
-                            <option value="Reservado">Reservado</option>
-                            <option value="Check-in">Check-in</option>
-                            <option value="Check-out">Check-out</option>
-                            <option value="Cancelado">Cancelado</option>
+                            <option value="Confirmada">Confirmada</option>
+                            <option value="Pendiente">Pendiente</option>
+                            <option value="Cancelada">Cancelada</option>
                         </select>
                     </div>
 
