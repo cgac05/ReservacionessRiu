@@ -69,7 +69,7 @@
                                                 <td>
                                                     <div class="btn-group">
                                                         <button class="btn btn-warning btn-sm btnEditarRol" idRol="'.$value["id"].'" data-toggle="modal" data-target="#modal-editar-rol"><i class="fas fa-pencil-alt text-white"></i></button>
-                                                        <button class="btn btn-danger btn-sm btnEliminarRol" idRol="'.$value["id"].'"><i class="fas fa-trash-alt"></i></button>
+                                                        <!-- <button class="btn btn-danger btn-sm btnEliminarRol" idRol="'.$value["id"].'"><i class="fas fa-trash-alt"></i></button> -->
                                                     </div>
                                                 </td>
                                             </tr>';
@@ -128,7 +128,7 @@ Modal Crear rol
                 </div>
 
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-danger pull-left" data-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-danger pull-left" data-dismiss="modal"><i class="fas fa-times"></i> Cerrar</button>
                     <button type="submit" class="btn btn-primary">Guardar</button>
                 </div>
 

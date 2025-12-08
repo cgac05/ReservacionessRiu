@@ -153,10 +153,10 @@
                                                     idReserva="<?php echo $value["Clave de reserva"]  ?>">
                                                     <i class="fas fa-times"></i> Cancelar
                                                 </button>
-                                                <button class="btn btn-danger btn-sm eliminarRol"
+                                                <!-- <button class="btn btn-danger btn-sm eliminarRol"
                                                     idRolesE="<?php echo $value["Clave de reserva"]  ?>">
                                                     <i class="fas fa-trash-alt"></i> Eliminar
-                                                </button>
+                                                </button> -->
 
                                             </div>
 
@@ -260,7 +260,7 @@ Modal Crear reservacion
                 </div>
 
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-danger pull-left" data-dismiss="modal">cerrar</button>
+                    <button type="button" class="btn btn-danger pull-left" data-dismiss="modal"><i class="fas fa-times"></i> cerrar</button>
                     <button type="submit" class="btn btn-primary">guardar</button>
                 </div>
 
@@ -320,7 +320,7 @@ Modal Crear reservacion
                     </div>
 
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-danger pull-left" data-dismiss="modal">Cerrar</button>
+                        <button type="button" class="btn btn-danger pull-left" data-dismiss="modal"><i class="fas fa-times"></i> Cerrar</button>
                         <button type="submit" class="btn btn-primary">Guardar cambios</button>
                     </div>
 
@@ -347,7 +347,7 @@ Modal Crear reservacion
                         <p>¿Está seguro que desea eliminar esta reservación?</p>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal"><i class="fas fa-times"></i> Cancelar</button>
                         <button type="submit" class="btn btn-danger">Eliminar</button>
                     </div>
                 </form>
@@ -373,7 +373,7 @@ Modal Crear reservacion
                         <p>¿Está seguro que desea cancelar esta reservación?</p>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal"><i class="fas fa-times"></i> Cerrar</button>
                         <button type="submit" class="btn btn-danger">Confirmar cancelación</button>
                     </div>
                 </form>
@@ -453,9 +453,6 @@ Modal Crear reservacion
                                                         '</button>' +
                                                         '<button class="btn btn-danger btn-sm btnCancelarReserva" idReserva="' + reservacion['Clave de reserva'] + '">' +
                                                             '<i class="fas fa-times"></i> Cancelar' +
-                                                        '</button>' +
-                                                        '<button class="btn btn-danger btn-sm eliminarRol" idRolesE="' + reservacion['Clave de reserva'] + '">' +
-                                                            '<i class="fas fa-trash-alt"></i> Eliminar' +
                                                         '</button>' +
                                                     '</div>' +
                                                 '</td>' +

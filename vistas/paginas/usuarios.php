@@ -145,7 +145,7 @@ Modal Crear usuarios
                 </div>
 
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-danger pull-left" data-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-danger pull-left" data-dismiss="modal"><i class="fas fa-times"></i> Cerrar</button>
                     <button type="submit" class="btn btn-primary">Guardar</button>
                 </div>
 
