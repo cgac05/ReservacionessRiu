@@ -111,8 +111,60 @@ class ctrReservaciones{
         // Devolver false si no es la acción correcta, para evitar errores.
         return false;
     }
-}
 
+
+    static public function ctrBuscarReservaciones(){
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $filtros = [
+                'fecha_desde' => $_POST['fecha_desde'] ?? null,
+                'fecha_hasta' => $_POST['fecha_hasta'] ?? null,
+                'tipo_habitacion' => $_POST['tipo_habitacion'] ?? null,
+                'numero_reserva' => $_POST['numero_reserva'] ?? null,
+                'estados' => $_POST['estados'] ?? []
+            ];
+
+            $respuesta = mdlreservaciones::mdlBuscarReservaciones($filtros);
+            
+            header('Content-Type: application/json');
+            echo json_encode($respuesta);
+        }
+    }
+    
+    static public function ctrActualizarReservacion(){
+        if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['clave_reserva'])) {
+            $datos = [
+                'clave_reserva' => $_POST['clave_reserva'],
+                'nombre_cliente' => $_POST['nombre_cliente'],
+                'fecha_entrada' => $_POST['fecha_entrada'],
+                'fecha_salida' => $_POST['fecha_salida'],
+                'estado' => $_POST['estado']
+            ];
+
+            $respuesta = mdlreservaciones::mdlActualizarReservacion($datos);
+
+            if ($respuesta) {
+                // Redirigir o mostrar un mensaje de éxito
+                echo "<script>alert('Reservación actualizada con éxito.'); window.location = 'reservaciones';</script>";
+            } else {
+                // Mostrar un mensaje de error
+                echo "<script>alert('Error al actualizar la reservación.'); window.location = 'reservaciones';</script>";
+            }
+        }
+    }
+    static public function ctrCancelarReservacion(){
+        if(isset($_POST['clave_reserva_cancelar'])){
+            $tabla = "vw_reservacion"; // O la tabla que sea correcta
+            $clave = $_POST['clave_reserva_cancelar'];
+            $respuesta = mdlreservaciones::mdlCancelarReservacion($tabla, $clave);
+
+            if($respuesta){
+                echo "<script>alert('Reservación cancelada con éxito.'); window.location = 'reservaciones';</script>";
+            } else {
+                echo "<script>alert('Error al cancelar la reservación.'); window.location = 'reservaciones';</script>";
+            }
+        }
+    }
+}
 
 
 

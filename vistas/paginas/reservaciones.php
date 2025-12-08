@@ -83,8 +83,7 @@
                     </div><br>
                             <div class="col-md-15">
                                 <div class="col-md-3">
-                                <button type="button" class="btn btn-success crear-perfil btn-block margin-bottom" data-toggle="modal"
-                                    data-target="#modal-crear-usuarios">
+                                <button type="button" class="btn btn-success btn-block margin-bottom" id="btn-actualizar-busqueda">
                                     Actualizar busqueda
                                 </button><br>
                             </div>
@@ -150,9 +149,13 @@
                                                     <i class="fa fa-cube"> Modificar</i>
                                                 </button>
                           
+                                                <button class="btn btn-danger btn-sm btnCancelarReserva"
+                                                    idReserva="<?php echo $value["Clave de reserva"]  ?>">
+                                                    <i class="fas fa-times"></i> Cancelar
+                                                </button>
                                                 <button class="btn btn-danger btn-sm eliminarRol"
                                                     idRolesE="<?php echo $value["Clave de reserva"]  ?>">
-                                                    <i class="fas fa-trash-alt"></i>
+                                                    <i class="fas fa-trash-alt"></i> Eliminar
                                                 </button>
 
                                             </div>
@@ -355,6 +358,32 @@ Modal Crear reservacion
     </div>
 
 
+    <!--=====================================
+    Modal Cancelar reservación
+    ======================================-->
+    <div class="modal modal-default fade" id="modal-cancelar-reserva">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="alert alert-warning alert-dismissible ">Cancelar reservación</h4>
+                </div>
+                <form method="post" id="form-cancelar-reservacion">
+                    <input type="hidden" name="clave_reserva_cancelar" value="">
+                    <div class="modal-body">
+                        <p>¿Está seguro que desea cancelar esta reservación?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                        <button type="submit" class="btn btn-danger">Confirmar cancelación</button>
+                    </div>
+                </form>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+
+
     <!-- Script para abrir y rellenar modales -->
     <?php
         if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['clave_reserva_eliminar'])){
@@ -367,14 +396,86 @@ Modal Crear reservacion
                 echo "<script>alert('Reservación procesada (eliminada si existía).'); window.location = 'reservaciones';</script>";
             }
         }
+        
+        if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['clave_reserva'])){
+            ctrReservaciones::ctrActualizarReservacion();
+        }
+        if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['clave_reserva_cancelar'])){
+            ctrReservaciones::ctrCancelarReservacion();
+        }
     ?>
     <script>
         (function waitForjQuery(){
             if (window.jQuery) {
                 (function($){
                     $(function(){
+                        
+                        // AJAX para la búsqueda dinámica
+                        $('#btn-actualizar-busqueda').on('click', function() {
+                            var fecha_desde = $('#filter-fecha-desde').val();
+                            var fecha_hasta = $('#filter-fecha-hasta').val();
+                            var tipo_habitacion = $('#filter-tipo').val();
+                            var numero_reserva = $('#filter-numero').val();
+                            var estados = [];
+                            $('.filter-estado:checked').each(function() {
+                                estados.push($(this).val());
+                            });
+
+                            $.ajax({
+                                url: 'vistas/paginas/ajax/reservaciones.ajax.php',
+                                type: 'POST',
+                                data: {
+                                    accion: 'buscar',
+                                    fecha_desde: fecha_desde,
+                                    fecha_hasta: fecha_hasta,
+                                    tipo_habitacion: tipo_habitacion,
+                                    numero_reserva: numero_reserva,
+                                    estados: estados
+                                },
+                                dataType: 'json',
+                                success: function(response) {
+                                    var tbody = $('.tablaperfil tbody');
+                                    tbody.empty(); // Limpiar la tabla
+
+                                    if (response.length > 0) {
+                                        $.each(response, function(index, reservacion) {
+                                            var fila = '<tr>' +
+                                                '<td>' + (index + 1) + '</td>' +
+                                                '<td>' + reservacion['Clave de reserva'] + '</td>' +
+                                                '<td>' + reservacion['Nombre cliente'] + '</td>' +
+                                                '<td>' + reservacion['Fecha de entrada'] + '</td>' +
+                                                '<td>' + reservacion['Fecha de salida'] + '</td>' +
+                                                '<td>' + reservacion['Estado'] + '</td>' +
+                                                '<td>' +
+                                                    '<div class="btn-group">' +
+                                                        '<button class="btn btn-warning btn-sm btnEditarRoles" data-toggle="modal" idRol="' + reservacion['Clave de reserva'] + '" data-target="#modal-editar-rol">' +
+                                                            '<i class="fa fa-cube"> Modificar</i>' +
+                                                        '</button>' +
+                                                        '<button class="btn btn-danger btn-sm btnCancelarReserva" idReserva="' + reservacion['Clave de reserva'] + '">' +
+                                                            '<i class="fas fa-times"></i> Cancelar' +
+                                                        '</button>' +
+                                                        '<button class="btn btn-danger btn-sm eliminarRol" idRolesE="' + reservacion['Clave de reserva'] + '">' +
+                                                            '<i class="fas fa-trash-alt"></i> Eliminar' +
+                                                        '</button>' +
+                                                    '</div>' +
+                                                '</td>' +
+                                            '</tr>';
+                                            tbody.append(fila);
+                                        });
+                                    } else {
+                                        tbody.append('<tr><td colspan="7">No se encontraron reservaciones con los filtros seleccionados.</td></tr>');
+                                    }
+                                },
+                                error: function() {
+                                    var tbody = $('.tablaperfil tbody');
+                                    tbody.empty();
+                                    tbody.append('<tr><td colspan="7">Error al realizar la búsqueda.</td></tr>');
+                                }
+                            });
+                        });
+
                         // Editar modal: abre y rellena campos básicos
-                        $('.btnEditarRoles').on('click', function(e){
+                        $(document).on('click', '.btnEditarRoles', function(e){
                             e.preventDefault();
                             var $row = $(this).closest('tr');
                             var clave = $(this).attr('idRol') || '';
@@ -393,8 +494,17 @@ Modal Crear reservacion
                             $modal.modal('show');
                         });
 
+                        // Cancelar modal: coloca la clave en el formulario
+                        $(document).on('click', '.btnCancelarReserva', function(e){
+                            e.preventDefault();
+                            var clave = $(this).attr('idReserva') || '';
+                            var $modal = $('#modal-cancelar-reserva');
+                            $modal.find('input[name="clave_reserva_cancelar"]').val(clave);
+                            $modal.modal('show');
+                        });
+
                         // Eliminar modal: coloca la clave en el formulario
-                        $('.eliminarRol').on('click', function(e){
+                        $(document).on('click', '.eliminarRol', function(e){
                             e.preventDefault();
                             var clave = $(this).attr('idRolesE') || '';
                             var $modal = $('#modal-eliminar-rol');
@@ -415,6 +525,7 @@ Modal Crear reservacion
                                 $numero.val('');
                                 $numero.val($numero.val().replace(/\u00A0/g, '').trim());
                             }
+                            $('#btn-actualizar-busqueda').trigger('click');
                         });
 
                     });

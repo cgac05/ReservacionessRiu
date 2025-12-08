@@ -288,8 +288,121 @@ class mdlreservaciones{
         }
     }
 
+
+    static public function mdlActualizarReservacion($datos){
+        try{
+            $db = Conexion::conectar();
+            $sql = "UPDATE vw_reservacion SET 
+                        [Nombre cliente] = :nombre_cliente, 
+                        [Fecha de entrada] = :fecha_entrada, 
+                        [Fecha de salida] = :fecha_salida, 
+                        [Estado] = :estado 
+                    WHERE [Clave de reserva] = :clave_reserva";
+            
+            $stmt = $db->prepare($sql);
+            
+            $stmt->bindParam(":nombre_cliente", $datos['nombre_cliente'], PDO::PARAM_STR);
+            $stmt->bindParam(":fecha_entrada", $datos['fecha_entrada'], PDO::PARAM_STR);
+            $stmt->bindParam(":fecha_salida", $datos['fecha_salida'], PDO::PARAM_STR);
+            $stmt->bindParam(":estado", $datos['estado'], PDO::PARAM_STR);
+            $stmt->bindParam(":clave_reserva", $datos['clave_reserva'], PDO::PARAM_STR);
+
+            if($stmt->execute()){
+                return true;
+            } else {
+                self::$lastError = $stmt->errorInfo()[2];
+                return false;
+            }
+
+        } catch (Exception $e) {
+            self::$lastError = $e->getMessage();
+            error_log("mdlActualizarReservacion error: " . $e->getMessage());
+            return false;
+        }
+    }
+
+    static public function mdlBuscarReservaciones($filtros){
+        try{
+            $db = Conexion::conectar();
+            $sql = "SELECT * FROM vw_reservacion WHERE 1=1";
+            $params = [];
+
+            if(!empty($filtros['fecha_desde'])){
+                $sql .= " AND [Fecha de entrada] >= :fecha_desde";
+                $params[':fecha_desde'] = $filtros['fecha_desde'];
+            }
+
+            if(!empty($filtros['fecha_hasta'])){
+                $sql .= " AND [Fecha de salida] <= :fecha_hasta";
+                $params[':fecha_hasta'] = $filtros['fecha_hasta'];
+            }
+
+            if(!empty($filtros['tipo_habitacion'])){
+                $sql .= " AND [TipoHabitacionId] = :tipo_habitacion";
+                $params[':tipo_habitacion'] = $filtros['tipo_habitacion'];
+            }
+
+            if(!empty($filtros['numero_reserva'])){
+                $sql .= " AND [Clave de reserva] LIKE :numero_reserva";
+                $params[':numero_reserva'] = '%' . $filtros['numero_reserva'] . '%';
+            }
+
+            if(!empty($filtros['estados'])){
+                $inQuery = implode(',', array_fill(0, count($filtros['estados']), '?'));
+                $sql .= " AND Estado IN (" . $inQuery . ")";
+            }
+
+            $stmt = $db->prepare($sql);
+
+            // Bind named parameters
+            foreach($params as $key => &$val){
+                $stmt->bindParam($key, $val);
+            }
+            
+            // Bind positional parameters for states
+            if(!empty($filtros['estados'])){
+                $i = 1 + count($params);
+                foreach($filtros['estados'] as $k => $estado){
+                    $stmt->bindValue($i, $estado, PDO::PARAM_STR);
+                    $i++;
+                }
+            }
+            
+            $stmt->execute();
+            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $stmt = null;
+            return $result;
+
+        } catch (Exception $e) {
+            self::$lastError = $e->getMessage();
+            error_log("mdlBuscarReservaciones error: " . $e->getMessage());
+            return [];
+        }
+    }
+
+    static public function mdlCancelarReservacion($tabla, $clave){
+        try{
+            $db = Conexion::conectar();
+            $sql = "UPDATE {$tabla} SET Estado = 'Cancelada' WHERE [Clave de reserva] = :clave";
+            
+            $stmt = $db->prepare($sql);
+            $stmt->bindParam(":clave", $clave, PDO::PARAM_STR);
+
+            if($stmt->execute()){
+                return true;
+            } else {
+                self::$lastError = $stmt->errorInfo()[2];
+                return false;
+            }
+
+        } catch (Exception $e) {
+            self::$lastError = $e->getMessage();
+            error_log("mdlCancelarReservacion error: " . $e->getMessage());
+            return false;
+        }
+    }
+
 }
-//mdlMostrarTiposHabitacion
 
 
 ?>

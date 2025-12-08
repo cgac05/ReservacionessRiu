@@ -65,7 +65,9 @@ $reservaciones = ctrReservaciones::ctrMostrarReservaciones();
         if(isset($_GET["pagina"])){
 
             if($_GET["pagina"]== "nuevaReserva" ||
-               $_GET["pagina"]== "reservaciones"){
+               $_GET["pagina"]== "reservaciones" ||
+               $_GET["pagina"]== "roles" ||
+               $_GET["pagina"]== "usuarios"){
 
                 include "paginas/".$_GET["pagina"].".php";
 
@@ -306,6 +308,8 @@ $reservaciones = ctrReservaciones::ctrMostrarReservaciones();
     <script src="vistas/recursos/bower_components/jquery-slimscroll/jquery.slimscroll.min.js"></script>
     <!-- FastClick -->
     <script src="vistas/recursos/bower_components/fastclick/lib/fastclick.js"></script>
+    <!-- SweetAlert -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.0/sweetalert.min.js"></script>
     <!-- AdminLTE App -->
     <script src="vistas/recursos/dist/js/adminlte.min.js"></script>
     <!-- AdminLTE for demo purposes -->

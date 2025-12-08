@@ -8,7 +8,7 @@
 
                 <div class="col-sm-6">
 
-                    <h1>administrar roles</h1>
+                    <h1>Administrar roles</h1>
 
                 </div>
 
@@ -35,9 +35,9 @@
 
                         <div class="card-header">
 
-                            <button type="button" class="btn btn-success crear-perfil" data-toggle="modal"
-                                data-target="#modal-crear-usuarios">
-                                crear nuevo usuarios
+                            <button type="button" class="btn btn-success crear-rol" data-toggle="modal"
+                                data-target="#modal-crear-rol">
+                                Crear nuevo rol
                             </button><br>
 
                         </div><br>
@@ -45,50 +45,36 @@
 
                         <div class="card-body">
 
-                            <table class="table table-bordered table-striped dt-responsive tablaperfil" width="100%">
+                            <table class="table table-bordered table-striped dt-responsive tabla-roles" width="100%">
 
                                 <thead>
 
                                     <tr>
 
                                         <th style="width:10px">#</th>
-                                        <th>Nombre</th>
-                                        <th>usuario</th>
-                                        <th>foto</th>
-                                        <th>rol</th>
-                                        <th>acciones</th>
+                                        <th>Nombre del rol</th>
+                                        <th>Acciones</th>
 
                                     </tr>
 
                                 </thead>
 
                                 <tbody>
-
-                                    <!--  <tr>
-                    
-                    <td>1</td>
-                    <td>Hotel Portobelo</td>
-                    <td>portobelo</td>
-                    <td>Administrador</td>
-                    <td><button class="btn btn-info btn-sm">Activo</button></td>
-                    <td>
-
-                      <div class='btn-group'>
-                      
-                        <button class="btn btn-warning btn-sm">
-                          <i class="fas fa-pencil-alt text-white"></i>
-                        </button>  
-
-                        <button class="btn btn-danger btn-sm">
-                          <i class="fas fa-trash-alt"></i>
-                        </button> 
-
-                      </div> 
-
-                    </td>
-
-                  </tr> -->
-
+                                <?php
+                                    $roles = ctrRoles::ctrMostrarRoles();
+                                    foreach($roles as $key => $value){
+                                        echo '<tr>
+                                                <td>'.($key+1).'</td>
+                                                <td>'.$value["nombre"].'</td>
+                                                <td>
+                                                    <div class="btn-group">
+                                                        <button class="btn btn-warning btn-sm btnEditarRol" idRol="'.$value["id"].'" data-toggle="modal" data-target="#modal-editar-rol"><i class="fas fa-pencil-alt text-white"></i></button>
+                                                        <button class="btn btn-danger btn-sm btnEliminarRol" idRol="'.$value["id"].'"><i class="fas fa-trash-alt"></i></button>
+                                                    </div>
+                                                </td>
+                                            </tr>';
+                                    }
+                                ?>
                                 </tbody>
 
                             </table>
@@ -126,63 +112,30 @@
 
 
 <!--=====================================
-Modal Crear usuarios
+Modal Crear rol
 ======================================-->
-<div class="modal modal-default fade" id="modal-crear-usuarios">
+<div class="modal modal-default fade" id="modal-crear-rol">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="alert alert-success alert-dismissible ">Agregar nuevo usuario</h4>
+                <h4 class="alert alert-success alert-dismissible ">Agregar nuevo rol</h4>
             </div>
-            <form method="post" enctype="multipart/form-data">
+            <form method="post">
 
                 <div class="form-group has-feedback" bis_skin_checked="1">
-                    <input type="text" class="form-control" name="nom_perfil" placeholder="nombre">
-                    <span class="glyphicon glyphicon-user form-control-feedback"></span>
-                </div>
-
-                <div class="form-group has-feedback" bis_skin_checked="1">
-                    <input type="text" class="form-control" name="nom_user" placeholder="usuario">
-                    <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
-                </div>
-
-                <div class="form-group has-feedback" bis_skin_checked="1">
-                    <input type="password" class="form-control" name="pass_user" placeholder="password">
-                    <span class="glyphicon glyphicon-eye-close form-control-feedback"></span>
-                </div>
-
-                <div class="form-group has-feedback" bis_skin_checked="1">
-                    <div class="btn btn-default btn-file" bis_skin_checked="1">
-                        <i class="fas fa-paperclip"></i> Adjuntar Imagen de perfil
-                        <input type="file" name="subirImgPerfil">
-                    </div>
-                    <img class="previsualizarImgPerfil img-fluid py-2" width='200' height='200'>
-                    <p class="help-block small"> Dimensiones: 480px * 382px | Peso Max. 2MB | Formato: JPG o PNG</p>
-                </div>
-
-
-                <div class="form-group has-feedback">
-
-
-                    <label>rol</label>
-
-
+                    <input type="text" class="form-control" name="nuevo_rol" placeholder="Nombre del rol">
+                    <span class="glyphicon glyphicon-king form-control-feedback"></span>
                 </div>
 
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-danger pull-left" data-dismiss="modal">cerrar</button>
-                    <button type="submit" class="btn btn-primary">guardar</button>
+                    <button type="button" class="btn btn-danger pull-left" data-dismiss="modal">Cerrar</button>
+                    <button type="submit" class="btn btn-primary">Guardar</button>
                 </div>
 
                 <?php 
-
-              /*  $guardarPerfil = new ctrPerfiles();
-                $guardarPerfil->ctrGuardarPerfil();*/
-                
-                
+                    $crearRol = new ctrRoles();
+                    $crearRol->ctrCrearRol();
                 ?>
-
-
             </form>
         </div>
         <!-- /.modal-content -->
