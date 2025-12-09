@@ -110,6 +110,7 @@
                                         <th>Nombre del cliente</th>
                                         <th>Fecha de entrada</th>
                                         <th>Fecha de salida</th>
+                                        <th>Tipo de habitación</th>
                                         <th>Estado</th>
                                         <th>Acciones</th>
 
@@ -137,6 +138,7 @@
                                         <td><?php echo $value["Nombre cliente"]  ?></td>
                                         <td><?php echo $value["Fecha de entrada"]  ?></td>
                                         <td><?php echo $value["Fecha de salida"]  ?></td>
+                                        <td><?php echo $value["Tipo habitacion"]  ?></td>
                                         <td><?php echo $value["Estado"]  ?></td>
 
                                         <td>
@@ -391,7 +393,7 @@ Modal Crear reservacion
             if ($resultado === false){
                 echo "<script>alert('Ocurrió un error al eliminar la reservación.');</script>";
             } else {
-                // Si se eliminó (resultado puede ser 0 si no se encontró), recargar la página para actualizar la tabla
+                
                 echo "<script>alert('Reservación procesada (eliminada si existía).'); window.location = 'reservaciones';</script>";
             }
         }
@@ -444,6 +446,7 @@ Modal Crear reservacion
                                                 '<td>' + reservacion['Nombre cliente'] + '</td>' +
                                                 '<td>' + reservacion['Fecha de entrada'] + '</td>' +
                                                 '<td>' + reservacion['Fecha de salida'] + '</td>' +
+                                                '<td>' + reservacion['Tipo habitacion'] + '</td>' +
                                                 '<td>' + reservacion['Estado'] + '</td>' +
                                                 '<td>' +
                                                     '<div class="btn-group">' +

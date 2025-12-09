@@ -338,7 +338,7 @@ class mdlreservaciones{
             }
 
             if(!empty($filtros['tipo_habitacion'])){
-                $sql .= " AND [TipoHabitacionId] = :tipo_habitacion";
+                $sql .= " AND [Tipo habitacion] = :tipo_habitacion";
                 $params[':tipo_habitacion'] = $filtros['tipo_habitacion'];
             }
 
