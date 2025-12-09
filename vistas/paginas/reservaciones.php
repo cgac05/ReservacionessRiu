@@ -294,24 +294,37 @@ Modal Crear reservacion
                 </div>
                 <form method="post" id="form-editar-reservacion">
 
-                    <input type="hidden" name="clave_reserva" value="">
-
-                    <div class="form-group has-feedback">
-                        <label>Nombre cliente</label>
-                        <input type="text" class="form-control" name="nombre_cliente" placeholder="Nombre cliente">
+                    <!-- Client Info Box -->
+                    <div class="card-body">
+                        <div class="card card-primary card-outline">
+                            <div class="card-header">
+                                <h5 class="card-title">Información del Cliente</h5>
+                            </div>
+                            <div class="card-body">
+                                <p><strong>Nombre:</strong> <span id="info-cliente-nombre">Cargando...</span></p>
+                                <p><strong>Email:</strong> <span id="info-cliente-email">Cargando...</span></p>
+                            </div>
+                        </div>
                     </div>
 
-                    <div class="form-group has-feedback">
+                    <input type="hidden" name="clave_reserva" value="">
+
+                    <div class="form-group has-feedback" style="padding: 0 1.25rem;">
+                        <label>Nombre cliente (No editable)</label>
+                        <input type="text" class="form-control" name="nombre_cliente" placeholder="Nombre cliente" readonly>
+                    </div>
+
+                    <div class="form-group has-feedback" style="padding: 0 1.25rem;">
                         <label>Fecha de entrada</label>
                         <input type="date" class="form-control" name="fecha_entrada">
                     </div>
 
-                    <div class="form-group has-feedback">
+                    <div class="form-group has-feedback" style="padding: 0 1.25rem;">
                         <label>Fecha de salida</label>
                         <input type="date" class="form-control" name="fecha_salida">
                     </div>
 
-                    <div class="form-group has-feedback">
+                    <div class="form-group has-feedback" style="padding: 0 1.25rem;">
                         <label>Estado</label>
                         <select class="form-control" name="estado">
                             <option value="Confirmada">Confirmada</option>
@@ -481,15 +494,49 @@ Modal Crear reservacion
                             var nombre = $row.find('td').eq(2).text().trim();
                             var fechaEntrada = $row.find('td').eq(3).text().trim();
                             var fechaSalida = $row.find('td').eq(4).text().trim();
-                            var estado = $row.find('td').eq(5).text().trim();
+                            var estado = $row.find('td').eq(6).text().trim();
 
                             var $modal = $('#modal-editar-rol');
+
+                            // Reset client info and set default values
+                            $('#info-cliente-nombre').text('Cargando...');
+                            $('#info-cliente-email').text('Cargando...');
                             $modal.find('input[name="clave_reserva"]').val(clave);
                             $modal.find('input[name="nombre_cliente"]').val(nombre);
-                            // rellenar fechas en formato YYYY-MM-DD si vienen así
+                             // The client name input is readonly now
+                            $modal.find('input[name="nombre_cliente"]').prop('readonly', true);
+                            
                             if (/^\d{4}-\d{2}-\d{2}$/.test(fechaEntrada)) $modal.find('input[name="fecha_entrada"]').val(fechaEntrada);
                             if (/^\d{4}-\d{2}-\d{2}$/.test(fechaSalida)) $modal.find('input[name="fecha_salida"]').val(fechaSalida);
                             $modal.find('select[name="estado"]').val(estado);
+                            
+                            // AJAX call to get client info
+                            if (clave) {
+                                $.ajax({
+                                    url: 'vistas/paginas/ajax/reservaciones.ajax.php',
+                                    type: 'POST',
+                                    data: {
+                                        accion: 'obtenerCliente',
+                                        clave_reserva: clave
+                                    },
+                                    dataType: 'json',
+                                    success: function(response) {
+                                        if (response && response.Email) {
+                                            var nombreCompleto = (response.Nombre || '') + ' ' + (response.Apellido || '');
+                                            $('#info-cliente-nombre').text(nombreCompleto.trim());
+                                            $('#info-cliente-email').text(response.Email);
+                                        } else {
+                                            $('#info-cliente-nombre').text('No encontrado');
+                                            $('#info-cliente-email').text('No encontrado');
+                                        }
+                                    },
+                                    error: function() {
+                                        $('#info-cliente-nombre').text('Error al cargar');
+                                        $('#info-cliente-email').text('Error al cargar');
+                                    }
+                                });
+                            }
+
                             $modal.modal('show');
                         });
 

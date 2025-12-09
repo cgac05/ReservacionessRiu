@@ -130,6 +130,11 @@ class ctrReservaciones{
         }
     }
     
+    static public function ctrObtenerClientePorReservacion($clave_reserva) {
+        $respuesta = mdlreservaciones::mdlObtenerClientePorReservacion($clave_reserva);
+        return $respuesta;
+    }
+    
     static public function ctrActualizarReservacion(){
         if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['clave_reserva'])) {
             $datos = [

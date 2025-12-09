@@ -289,6 +289,42 @@ class mdlreservaciones{
     }
 
 
+    static public function mdlObtenerClientePorReservacion($clave_reserva){
+        try{
+            $db = Conexion::conectar();
+            
+            // Using the stored procedure provided by the user.
+            $sql = "{CALL sp_obtnerCliente(?, ?, ?)}";
+            
+            $stmt = $db->prepare($sql);
+            
+            $idReserva = intval($clave_reserva);
+            $nombreCliente = '';
+            $emailCliente = '';
+
+            // Bind parameters: 1 input, 2 output.
+            $stmt->bindParam(1, $idReserva, PDO::PARAM_INT);
+            $stmt->bindParam(2, $nombreCliente, PDO::PARAM_STR|PDO::PARAM_INPUT_OUTPUT, 100);
+            $stmt->bindParam(3, $emailCliente, PDO::PARAM_STR|PDO::PARAM_INPUT_OUTPUT, 100);
+
+            $stmt->execute();
+            
+            $stmt = null; // Close cursor
+
+            // Return data in the format expected by the frontend JS.
+            return [
+                "Nombre" => $nombreCliente,
+                "Apellido" => "", // SP does not return a separate last name.
+                "Email" => $emailCliente
+            ];
+
+        } catch (Exception $e) {
+            self::$lastError = $e->getMessage();
+            error_log("mdlObtenerClientePorReservacion error: " . $e->getMessage());
+            return false;
+        }
+    }
+
     static public function mdlActualizarReservacion($datos){
         try{
             $db = Conexion::conectar();
