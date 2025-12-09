@@ -371,7 +371,8 @@ class mdlreservaciones{
     static public function mdlBuscarReservaciones($filtros){
         try{
             $db = Conexion::conectar();
-            $sql = "SELECT * FROM vw_reservacion WHERE 1=1";
+            // Added DISTINCT because the view can produce duplicate rows for reservations with multiple rooms.
+            $sql = "SELECT DISTINCT [Clave de reserva], [Nombre cliente], [Fecha de entrada], [Fecha de salida], [Estado], [Tipo habitacion] FROM vw_reservacion WHERE 1=1";
             $params = [];
 
             if(!empty($filtros['fecha_desde'])){
@@ -385,34 +386,34 @@ class mdlreservaciones{
             }
 
             if(!empty($filtros['tipo_habitacion'])){
-                $sql .= " AND [Tipo habitacion] = :tipo_habitacion";
-                $params[':tipo_habitacion'] = $filtros['tipo_habitacion'];
+                $sql .= " AND UPPER(LTRIM(RTRIM([Tipo habitacion]))) = :tipo_habitacion";
+                $params[':tipo_habitacion'] = strtoupper(trim($filtros['tipo_habitacion']));
             }
 
             if(!empty($filtros['numero_reserva'])){
-                $sql .= " AND [Clave de reserva] LIKE :numero_reserva";
+                // Casting the reservation key to a string to reliably use the LIKE operator.
+                $sql .= " AND CAST([Clave de reserva] AS VARCHAR(255)) LIKE :numero_reserva";
                 $params[':numero_reserva'] = '%' . $filtros['numero_reserva'] . '%';
             }
 
             if(!empty($filtros['estados'])){
-                $inQuery = implode(',', array_fill(0, count($filtros['estados']), '?'));
-                $sql .= " AND Estado IN (" . $inQuery . ")";
+                // Replaced positional placeholders with named placeholders to avoid mixing them.
+                $estado_placeholders = [];
+                foreach ($filtros['estados'] as $key => $estado) {
+                    $placeholder = ':estado_' . $key;
+                    $estado_placeholders[] = $placeholder;
+                    $params[$placeholder] = $estado;
+                }
+                if(count($estado_placeholders) > 0){
+                    $sql .= " AND Estado IN (" . implode(', ', $estado_placeholders) . ")";
+                }
             }
 
             $stmt = $db->prepare($sql);
 
-            // Bind named parameters
+            // Bind all named parameters from the $params array.
             foreach($params as $key => &$val){
                 $stmt->bindParam($key, $val);
-            }
-            
-            // Bind positional parameters for states
-            if(!empty($filtros['estados'])){
-                $i = 1 + count($params);
-                foreach($filtros['estados'] as $k => $estado){
-                    $stmt->bindValue($i, $estado, PDO::PARAM_STR);
-                    $i++;
-                }
             }
             
             $stmt->execute();

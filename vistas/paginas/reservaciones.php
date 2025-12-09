@@ -67,7 +67,7 @@
                                     <?php
                                         $tiposHabitacion = ctrReservaciones::ctrMostrarTiposHabitacion(); 
                                         foreach($tiposHabitacion as $tipo){ ?>
-                                    <option value="<?php echo $tipo['TipoHabitacionId']; ?>"><?php echo $tipo['Nombre']; ?></option>
+                                    <option value="<?php echo $tipo['Nombre']; ?>"><?php echo $tipo['Nombre']; ?></option>
                                     <?php } ?>
                                     
                                     
@@ -309,10 +309,7 @@ Modal Crear reservacion
 
                     <input type="hidden" name="clave_reserva" value="">
 
-                    <div class="form-group has-feedback" style="padding: 0 1.25rem;">
-                        <label>Nombre cliente (No editable)</label>
-                        <input type="text" class="form-control" name="nombre_cliente" placeholder="Nombre cliente" readonly>
-                    </div>
+
 
                     <div class="form-group has-feedback" style="padding: 0 1.25rem;">
                         <label>Fecha de entrada</label>
@@ -491,7 +488,6 @@ Modal Crear reservacion
                             e.preventDefault();
                             var $row = $(this).closest('tr');
                             var clave = $(this).attr('idRol') || '';
-                            var nombre = $row.find('td').eq(2).text().trim();
                             var fechaEntrada = $row.find('td').eq(3).text().trim();
                             var fechaSalida = $row.find('td').eq(4).text().trim();
                             var estado = $row.find('td').eq(6).text().trim();
@@ -502,9 +498,6 @@ Modal Crear reservacion
                             $('#info-cliente-nombre').text('Cargando...');
                             $('#info-cliente-email').text('Cargando...');
                             $modal.find('input[name="clave_reserva"]').val(clave);
-                            $modal.find('input[name="nombre_cliente"]').val(nombre);
-                             // The client name input is readonly now
-                            $modal.find('input[name="nombre_cliente"]').prop('readonly', true);
                             
                             if (/^\d{4}-\d{2}-\d{2}$/.test(fechaEntrada)) $modal.find('input[name="fecha_entrada"]').val(fechaEntrada);
                             if (/^\d{4}-\d{2}-\d{2}$/.test(fechaSalida)) $modal.find('input[name="fecha_salida"]').val(fechaSalida);
