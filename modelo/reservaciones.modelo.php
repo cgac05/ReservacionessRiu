@@ -292,31 +292,42 @@ class mdlreservaciones{
     static public function mdlActualizarReservacion($datos){
         try{
             $db = Conexion::conectar();
+            // The problem is likely that '[Nombre cliente]' is not updatable through the view 'vw_reservacion'.
+            // The 'cancel' operation works because it only updates 'Estado'.
+            // By removing the client name from this query, it should work as intended.
+            // I am also fixing the return logic to check rowCount, which will prevent false success messages.
             $sql = "UPDATE vw_reservacion SET 
-                        [Nombre cliente] = :nombre_cliente, 
-                        [Fecha de entrada] = :fecha_entrada, 
-                        [Fecha de salida] = :fecha_salida, 
-                        [Estado] = :estado 
-                    WHERE [Clave de reserva] = :clave_reserva";
+                            [Fecha de entrada] = :fecha_entrada, 
+                            [Fecha de salida] = :fecha_salida, 
+                            [Estado] = :estado 
+                        WHERE [Clave de reserva] = :clave_reserva";
             
             $stmt = $db->prepare($sql);
             
-            $stmt->bindParam(":nombre_cliente", $datos['nombre_cliente'], PDO::PARAM_STR);
             $stmt->bindParam(":fecha_entrada", $datos['fecha_entrada'], PDO::PARAM_STR);
             $stmt->bindParam(":fecha_salida", $datos['fecha_salida'], PDO::PARAM_STR);
             $stmt->bindParam(":estado", $datos['estado'], PDO::PARAM_STR);
             $stmt->bindParam(":clave_reserva", $datos['clave_reserva'], PDO::PARAM_STR);
 
-            if($stmt->execute()){
+            $stmt->execute();
+
+            // Check if any row was actually affected
+            if($stmt->rowCount() > 0){
                 return true;
             } else {
-                self::$lastError = $stmt->errorInfo()[2];
+                // Check for an actual execution error, even if rowCount is 0
+                if ($stmt->errorInfo()[0] !== '00000' && $stmt->errorInfo()[0] !== '01000') {
+                    self::$lastError = $stmt->errorInfo()[2];
+                    error_log("mdlActualizarReservacion SQL Error: ".self::$lastError);
+                    return false;
+                }
+                // If no error but no rows affected, it means the update didn't happen.
                 return false;
             }
 
         } catch (Exception $e) {
             self::$lastError = $e->getMessage();
-            error_log("mdlActualizarReservacion error: " . $e->getMessage());
+            error_log("mdlActualizarReservacion exception: " . $e->getMessage());
             return false;
         }
     }
