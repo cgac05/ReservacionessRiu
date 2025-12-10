@@ -22,28 +22,7 @@
                         <i class="fa fa-users"></i> <span>Usuarios</span>
                     </a>
                 </li>
-                <li>
-                    <a href="roles">
-                        <i class="fa fa-key"></i> <span>Roles</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="reservaciones">
-                        <i class="fa fa-user"></i> <span>Reservaciones</span>
-
-                    </a>
-                </li>
                 
-
-
-
-
-
-
-
-
-
-
             </ul>
         </section>
         <!-- /.sidebar -->

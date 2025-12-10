@@ -106,7 +106,8 @@
                                     <tr>
 
                                         <th style="width:10px">#</th>
-                                        <th>Numero de reservación</th>
+                                        <th style="width:20px">Numero de reservación</th>
+                                        <th>Empleado que realiza la reservación</th>
                                         <th>Nombre del cliente</th>
                                         <th>Fecha de entrada</th>
                                         <th>Fecha de salida</th>
@@ -135,6 +136,7 @@
 
                                         <td><?php echo ($key+1)  ?></td>
                                         <td><?php echo $value["Clave de reserva"]  ?></td>
+                                        <td><?php echo $value["Nombre empleado"]  ?></td>
                                         <td><?php echo $value["Nombre cliente"]  ?></td>
                                         <td><?php echo $value["Fecha de entrada"]  ?></td>
                                         <td><?php echo $value["Fecha de salida"]  ?></td>
@@ -347,6 +349,7 @@
                                             var fila = '<tr>' +
                                                 '<td>' + (index + 1) + '</td>' +
                                                 '<td>' + reservacion['Clave de reserva'] + '</td>' +
+                                                '<td>' + reservacion['Nombre empleado'] + '</td>' +
                                                 '<td>' + reservacion['Nombre cliente'] + '</td>' +
                                                 '<td>' + reservacion['Fecha de entrada'] + '</td>' +
                                                 '<td>' + reservacion['Fecha de salida'] + '</td>' +

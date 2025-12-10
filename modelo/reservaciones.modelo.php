@@ -328,10 +328,7 @@ class mdlreservaciones{
     static public function mdlActualizarReservacion($datos){
         try{
             $db = Conexion::conectar();
-            // The problem is likely that '[Nombre cliente]' is not updatable through the view 'vw_reservacion'.
-            // The 'cancel' operation works because it only updates 'Estado'.
-            // By removing the client name from this query, it should work as intended.
-            // I am also fixing the return logic to check rowCount, which will prevent false success messages.
+            
             $sql = "UPDATE vw_reservacion SET 
                             [Fecha de entrada] = :fecha_entrada, 
                             [Fecha de salida] = :fecha_salida, 
@@ -372,7 +369,7 @@ class mdlreservaciones{
         try{
             $db = Conexion::conectar();
             
-            $sql = "SELECT DISTINCT [Clave de reserva], [Nombre cliente], [Fecha de entrada], [Fecha de salida], [Estado], [Tipo habitacion] FROM vw_reservacion WHERE 1=1";
+            $sql = "SELECT DISTINCT * FROM vw_reservacion WHERE 1=1";
             $params = [];
 
             if(!empty($filtros['fecha_desde'])){

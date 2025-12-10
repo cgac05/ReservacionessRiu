@@ -96,7 +96,7 @@ class ctrReservaciones{
             // Recopilar todos los datos del POST en un array.
             $datos = [
                 'cliente_reserva' => $_POST['cliente_reserva'],
-                'id_empleado' => $_SESSION['idEmpleado'] ?? 2, // Usar ID de sesión o 2 como fallback
+                'id_empleado' => $_SESSION['idEmpleado'] ?? 2, 
                 'fecha_desde' => $_POST['fecha_desde'],
                 'fecha_hasta' => $_POST['fecha_hasta'],
                 'habitaciones_seleccionadas' => $_POST['habitaciones_seleccionadas'] ?? [],
