@@ -59,7 +59,7 @@
                       <button type="submit" name="accion" value="buscar_cliente" class="btn btn-info">Confirmar cliente</button>
                     </center>
                     <?php
-                        /*$consultar = new ctrReservaciones();
+                        $consultar = new ctrReservaciones();
                         $emailCliente = trim($_POST['cliente_reserva'] ?? '');
 
                         if (!empty($emailCliente)) {
@@ -76,7 +76,7 @@
                             } else {
                                 echo '<p class="text-danger" id="cliente-status">Usuario no encontrado</p>';
                             }
-                        }*/
+                        }
                     ?>
               </div>
             </div>
@@ -200,7 +200,7 @@
               </div><br><br>
                           
               <?php 
-                /*
+                
                 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['accion']) && $_POST['accion'] === 'guardar_reserva'){
                     $guardar = new ctrReservaciones();
                     $resultado = $guardar->ctrGuardarReservacionDividido();
@@ -213,7 +213,7 @@
                         echo "<script>alert('Ocurrió un error al guardar la reservación. Verifique que el cliente exista o que las fechas sean válidas.');</script>";
                     }
                 }
-                */
+                
               ?>
           </div>                
         </div>
