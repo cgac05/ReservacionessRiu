@@ -8,7 +8,7 @@ class mdlreservaciones{
     
     static public function mdlMostrarReservaciones($tabla){
         try{
-            $db = Conexion::conectar();
+            $db = Conexion::conectar(); 
 
             $stmt = $db->prepare("SELECT * FROM " . $tabla);
 
@@ -302,7 +302,7 @@ class mdlreservaciones{
             $nombreCliente = '';
             $emailCliente = '';
 
-            // Bind parameters: 1 input, 2 output.
+            
             $stmt->bindParam(1, $idReserva, PDO::PARAM_INT);
             $stmt->bindParam(2, $nombreCliente, PDO::PARAM_STR|PDO::PARAM_INPUT_OUTPUT, 100);
             $stmt->bindParam(3, $emailCliente, PDO::PARAM_STR|PDO::PARAM_INPUT_OUTPUT, 100);
@@ -357,7 +357,7 @@ class mdlreservaciones{
                     error_log("mdlActualizarReservacion SQL Error: ".self::$lastError);
                     return false;
                 }
-                // If no error but no rows affected, it means the update didn't happen.
+               
                 return false;
             }
 
@@ -371,7 +371,7 @@ class mdlreservaciones{
     static public function mdlBuscarReservaciones($filtros){
         try{
             $db = Conexion::conectar();
-            // Added DISTINCT because the view can produce duplicate rows for reservations with multiple rooms.
+            
             $sql = "SELECT DISTINCT [Clave de reserva], [Nombre cliente], [Fecha de entrada], [Fecha de salida], [Estado], [Tipo habitacion] FROM vw_reservacion WHERE 1=1";
             $params = [];
 
@@ -391,13 +391,13 @@ class mdlreservaciones{
             }
 
             if(!empty($filtros['numero_reserva'])){
-                // Casting the reservation key to a string to reliably use the LIKE operator.
+                
                 $sql .= " AND CAST([Clave de reserva] AS VARCHAR(255)) LIKE :numero_reserva";
                 $params[':numero_reserva'] = '%' . $filtros['numero_reserva'] . '%';
             }
 
             if(!empty($filtros['estados'])){
-                // Replaced positional placeholders with named placeholders to avoid mixing them.
+                
                 $estado_placeholders = [];
                 foreach ($filtros['estados'] as $key => $estado) {
                     $placeholder = ':estado_' . $key;
@@ -411,7 +411,7 @@ class mdlreservaciones{
 
             $stmt = $db->prepare($sql);
 
-            // Bind all named parameters from the $params array.
+            
             foreach($params as $key => &$val){
                 $stmt->bindParam($key, $val);
             }

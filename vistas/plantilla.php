@@ -65,18 +65,11 @@ $reservaciones = ctrReservaciones::ctrMostrarReservaciones();
         if(isset($_GET["pagina"])){
 
             if($_GET["pagina"]== "nuevaReserva" ||
-               $_GET["pagina"]== "reservaciones" ||
-               $_GET["pagina"]== "roles" ||
-               $_GET["pagina"]== "usuarios"){
+               $_GET["pagina"]== "reservaciones" ){
 
                 include "paginas/".$_GET["pagina"].".php";
 
-
-
-
             }
-
-
 
 
         }
@@ -88,17 +81,6 @@ $reservaciones = ctrReservaciones::ctrMostrarReservaciones();
         
         
         ?>
-
-
-
-
-
-
-
-
-
-
-
 
         <?php include "modulos/footer.php"; ?>
 

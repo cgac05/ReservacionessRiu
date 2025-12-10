@@ -67,7 +67,7 @@
                                     <?php
                                         $tiposHabitacion = ctrReservaciones::ctrMostrarTiposHabitacion(); 
                                         foreach($tiposHabitacion as $tipo){ ?>
-                                    <option value="<?php echo $tipo['Nombre']; ?>"><?php echo $tipo['Nombre']; ?></option>
+                                        <option value="<?php echo $tipo['Nombre']; ?>"><?php echo $tipo['Nombre']; ?></option>
                                     <?php } ?>
                                     
                                     
@@ -155,20 +155,13 @@
                                                     idReserva="<?php echo $value["Clave de reserva"]  ?>">
                                                     <i class="fas fa-times"></i> Cancelar
                                                 </button>
-                                                <!-- <button class="btn btn-danger btn-sm eliminarRol"
-                                                    idRolesE="<?php echo $value["Clave de reserva"]  ?>">
-                                                    <i class="fas fa-trash-alt"></i> Eliminar
-                                                </button> -->
+                                                
 
                                             </div>
 
                                         </td>
 
                                     </tr>
-
-
-
-
 
                                     <?php 
 
@@ -205,81 +198,6 @@
     </section>
 
 
-</div>
-
-
-
-
-
-
-
-
-
-
-
-<!--=====================================
-Modal Crear reservacion 
-======================================-->
-<div class="modal modal-default fade" id="modal-crear-usuarios">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="alert alert-success alert-dismissible ">Agregar nueva reservacion</h4>
-            </div>
-            <form method="post" enctype="multipart/form-data">
-
-                <div class="form-group has-feedback" bis_skin_checked="1">
-                    <input type="text" class="form-control" name="nom_perfil" placeholder="nombre">
-                    <span class="glyphicon glyphicon-user form-control-feedback"></span>
-                </div>
-
-                <div class="form-group has-feedback" bis_skin_checked="1">
-                    <input type="text" class="form-control" name="nom_user" placeholder="usuario">
-                    <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
-                </div>
-
-                <div class="form-group has-feedback" bis_skin_checked="1">
-                    <input type="password" class="form-control" name="pass_user" placeholder="password">
-                    <span class="glyphicon glyphicon-eye-close form-control-feedback"></span>
-                </div>
-
-                <div class="form-group has-feedback" bis_skin_checked="1">
-                    <div class="btn btn-default btn-file" bis_skin_checked="1">
-                        <i class="fas fa-paperclip"></i> Adjuntar Imagen de perfil
-                        <input type="file" name="subirImgPerfil">
-                    </div>
-                    <img class="previsualizarImgPerfil img-fluid py-2" width='200' height='200'>
-                    <p class="help-block small"> Dimensiones: 480px * 382px | Peso Max. 2MB | Formato: JPG o PNG</p>
-                </div>
-
-
-                <div class="form-group has-feedback">
-
-
-                    <label>rol</label>
-
-
-                </div>
-
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-danger pull-left" data-dismiss="modal"><i class="fas fa-times"></i> cerrar</button>
-                    <button type="submit" class="btn btn-primary">guardar</button>
-                </div>
-
-                <?php 
-
-              /*  $guardarPerfil = new ctrPerfiles();
-                $guardarPerfil->ctrGuardarPerfil();*/
-                
-                
-                ?>
-
-
-            </form>
-        </div>
-        <!-- /.modal-content -->
-    </div>
-    <!-- /.modal-dialog -->
 </div>
 
 
@@ -343,30 +261,6 @@ Modal Crear reservacion
     </div>
 
 
-    <!--=====================================
-    Modal Eliminar reservación
-    ======================================-->
-    <div class="modal modal-default fade" id="modal-eliminar-rol">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="alert alert-danger alert-dismissible ">Eliminar reservación</h4>
-                </div>
-                <form method="post" id="form-eliminar-reservacion">
-                    <input type="hidden" name="clave_reserva_eliminar" value="">
-                    <div class="modal-body">
-                        <p>¿Está seguro que desea eliminar esta reservación?</p>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal"><i class="fas fa-times"></i> Cancelar</button>
-                        <button type="submit" class="btn btn-danger">Eliminar</button>
-                    </div>
-                </form>
-            </div>
-            <!-- /.modal-content -->
-        </div>
-        <!-- /.modal-dialog -->
-    </div>
 
 
     <!--=====================================
@@ -494,7 +388,7 @@ Modal Crear reservacion
 
                             var $modal = $('#modal-editar-rol');
 
-                            // Reset client info and set default values
+                            // Inserta los valores en el modal
                             $('#info-cliente-nombre').text('Cargando...');
                             $('#info-cliente-email').text('Cargando...');
                             $modal.find('input[name="clave_reserva"]').val(clave);

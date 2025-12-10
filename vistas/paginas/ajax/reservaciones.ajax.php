@@ -10,7 +10,7 @@ class AjaxReservaciones {
         // Llama al método del controlador que maneja la búsqueda.
         ctrReservaciones::ctrBuscarReservaciones();
     }
-
+    // ejecutar proc
     public function ajaxObtenerCliente() {
         if (isset($_POST["clave_reserva"])) {
             $clave_reserva = $_POST["clave_reserva"];
@@ -18,7 +18,7 @@ class AjaxReservaciones {
             header('Content-Type: application/json');
             echo json_encode($respuesta);
         }
-    }
+    } /// crear reserva
 }
 
 // Comprueba la acción solicitada por AJAX.
